@@ -15,6 +15,5 @@
 
     <context:component-scan base-package="com.github.iappapp" />
     <context:annotation-config />
-
-    <import resource="application.xml" />
+    <import resource="classpath*: application.xml" />
 </beans>
