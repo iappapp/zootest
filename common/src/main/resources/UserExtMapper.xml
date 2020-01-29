@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.iappapp.dao.mapper.UserExtMapper">
+    <!-- namespace 接口全名 -->
+    <!-- statement -->
+    <select id="listUser" resultType="com.github.iappapp.dao.domain.User">
+		SELECT host, `user` FROM user
+	</select>
+</mapper>
