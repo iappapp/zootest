@@ -1,6 +1,5 @@
 package com.github.iappapp.util;
 
-import com.github.iappapp.dao.mapper.UserExtMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -38,17 +37,23 @@ public class SqlSessionFactoryUtil {
 
     }
 
+    /**
+     *
+     * @return the SqlSessionFactory
+     */
     public static SqlSessionFactory getSqlSessionFactory() {
         return sqlSessionFactory;
     }
 
-    public static void main(String[] args) throws Exception {
-        SqlSession session = SqlSessionFactoryUtil.getSqlSessionFactory().openSession();
-
-        UserExtMapper userExtMapper = session.getMapper(UserExtMapper.class);
-
-        System.out.println(userExtMapper.listUser(1));
-        session.close();
+    /**
+     *
+     * @return the SqlSession
+     */
+    public static SqlSession getSqlSession() {
+        if (null == sqlSessionFactory) {
+            return null;
+        }
+        return sqlSessionFactory.openSession();
     }
 
 }
