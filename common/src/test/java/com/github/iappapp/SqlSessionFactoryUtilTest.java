@@ -1,11 +1,14 @@
 package com.github.iappapp;
 
+import com.github.iappapp.dao.domain.User;
 import com.github.iappapp.dao.mapper.UserExtMapper;
 import com.github.iappapp.util.SqlSessionFactoryUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
 
 public class SqlSessionFactoryUtilTest {
     private static final Logger logger = LoggerFactory.getLogger(SqlSessionFactoryUtilTest.class);
@@ -32,6 +35,17 @@ public class SqlSessionFactoryUtilTest {
 
         logger.info("testQueryUser finish");
         logger.info(userExtMapper.queryUser(0, null).toString());
+
+        logger.info("testSelectUserList start");
+
+        Iterator<User> iterable = userExtMapper.selectUserList().iterator();
+        while (iterable.hasNext()) {
+            logger.info(iterable.next().toString());
+        }
+
+        logger.info(userExtMapper.selectUserByMap().toString());
+
+        logger.info(userExtMapper.selectMap().toString());
         sqlSession.close();
     }
 }

@@ -24,4 +24,15 @@
             </if>
         </where>
     </select>
+
+    <select id="selectUserList" resultType="com.github.iappapp.dao.domain.User">
+        SELECT host, `user` FROM user
+    </select>
+
+    <select id="selectUserByMap" resultType="map">
+        SELECT host, `user` FROM user
+    </select>
+    <select id="selectMap" resultType="map">
+        SELECT host, `user` FROM user
+    </select>
 </mapper>
