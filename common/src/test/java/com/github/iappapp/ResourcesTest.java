@@ -4,6 +4,10 @@ import org.apache.ibatis.io.Resources;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +20,7 @@ public class ResourcesTest {
 
     @Test
     public void TestResources() throws IOException {
-        File f = new File("~/Desktop/zootest/common/src/main/resources/jdbc.properties");
+        File f = new File("~/Desktop/zootest/common/src/main/resources/jdbc-dao.properties");
         logger.info("file exist={}", f.exists());
         //自定义类加载器
         ClassLoader classLoader = new ClassLoader() {
@@ -34,4 +38,35 @@ public class ResourcesTest {
         logger.info("properties={}", properties.keySet().toString());
     }
 
+    @Test
+    public void getResource() {
+        Resource resource = new DefaultResourceLoader().getResource("jdbc.properties");
+
+        logger.info(resource.getFilename());
+        logger.info("resource exist={}", resource.exists());
+        logger.info("resource content={}", resource.getDescription());
+
+        resource = new DefaultResourceLoader().getResource("classpath:/com/github/iappapp/dao/mapper/jdbc.properties");
+
+        logger.info(resource.getFilename());
+        logger.info("resource exist={}", resource.exists());
+        logger.info("resource content={}", resource.getDescription());
+
+        resource = new DefaultResourceLoader().getResource("classpath:jdbc-dao.properties");
+
+        logger.info(resource.getFilename());
+        logger.info("resource exist={}", resource.exists());
+        logger.info("resource content={}", resource.getDescription());
+    }
+
+    @Test
+    public void test() throws Exception {
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] resources = resolver.getResources("classpath*:jdbc*.properties");
+        logger.info("resources size={}", resources.length);
+        for (Resource resource : resources) {
+            logger.info("resource name={}", resource.getFilename());
+            logger.info("resource url={}", resource.getURI().toString());
+        }
+    }
 }
