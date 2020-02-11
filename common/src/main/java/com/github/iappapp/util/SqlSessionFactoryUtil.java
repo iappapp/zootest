@@ -53,7 +53,10 @@ public class SqlSessionFactoryUtil {
         if (null == sqlSessionFactory) {
             return null;
         }
-        return sqlSessionFactory.openSession();
+        return sqlSessionFactory.openSession(true);
     }
 
+    public static <T> T getMapper(Class<T> tClass) {
+        return getSqlSession().getMapper(tClass);
+    }
 }
