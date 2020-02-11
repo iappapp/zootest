@@ -17,9 +17,60 @@
     <!--配置视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="suffix" value=".jsp" />
-        <property name="prefix" value="/webapp/" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="order" value="2" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" />
     </bean>
 
+    <!-- 配置Freemarker属性文件路径 -->
+    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:freemarker.properties" />
+        <property name="ignoreResourceNotFound" value="true" />
+    </bean>
+
+    <!-- 配置freeMarker模板加载地址 -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!-- 视图解析器会在/WEB-INF/ftl/路径下扫描视图文件 -->
+        <property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+        <property name="defaultEncoding" value="utf-8" />
+        <!--全局变量部分 -->
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape" />
+                <entry key="html_escape" value-ref="fmHtmlEscape" />
+            </map>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="number_format">0.##########</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="template_exception_handler">ignore</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+    <bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape" />
+
+    <!-- 配置freeMarker视图解析器 -->
+    <bean id="freemarkerResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+        <!-- 给视图解析器配置优先级 -->
+        <property name="order" value="0" />
+        <!--设置编码 -->
+        <property name="contentType" value="text/html;charset=utf-8" />
+        <property name="requestContextAttribute" value="request" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSessionAttributes" value="true" />
+        <property name="allowSessionOverride" value="true" />
+        <property name="suffix" value=".ftl" />
+        <property name="prefix" value="" />
+    </bean>
 
     <context:component-scan base-package="com.github.iappapp" />
     <context:annotation-config />
