@@ -4,8 +4,9 @@
 .classpath
 .project
 
-./**/target
+**/target
 
 .idea
 .idea/**
 
+*.DS_Store
