@@ -64,4 +64,8 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" mode="proxy"/>
+
+    <bean id="basisJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" scope="singleton" >
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 </beans>

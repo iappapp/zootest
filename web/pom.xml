@@ -39,6 +39,11 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.iappapp</groupId>
+            <artifactId>jdbc-dao</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
