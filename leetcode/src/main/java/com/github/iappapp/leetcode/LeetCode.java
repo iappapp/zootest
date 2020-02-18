@@ -162,4 +162,33 @@ public class LeetCode {
 
         return ' ';
     }
+
+    /**
+     * 翻转单词顺序 LCOF
+     *
+     * @param s
+     * @return
+     */
+    public static String reverseWords(String s) {
+        String[] strings = s.split(" ");
+
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = strings.length - 1; i >= 0; i-- ) {
+            if (strings[i].equals("") || strings[i] == " ") {
+                continue;
+            }
+            sb.append(new String(strings[i].trim()));
+            System.out.println(strings[i].trim());
+            sb.append(" ");
+        }
+        int length = sb.toString().length();
+        if (length == 0) {
+            return "";
+        }
+        return sb.toString().substring(0, length - 1).trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseWords(""));
+    }
 }
