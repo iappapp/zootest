@@ -3,6 +3,7 @@ package com.github.iappapp.jdbc;
 import com.github.iappapp.BaseTest;
 import com.github.iappapp.dao.domain.Location;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,5 +31,11 @@ public class LocationJdbcDaoTest extends BaseTest {
         log.info("queryLocation locationList={}", locationList);
         int result = JdbcTestUtils.countRowsInTable(jdbcTemplate, "basis_location");
         log.info("countRowsInTable result={}", result);
+    }
+
+    @Test
+    public void test() {
+        int result = locationJdbcDao.updateLocationByStatementCreator();
+        Assert.assertTrue(result == 1);
     }
 }

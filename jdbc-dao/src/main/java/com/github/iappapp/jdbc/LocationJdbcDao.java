@@ -3,10 +3,11 @@ package com.github.iappapp.jdbc;
 import com.github.iappapp.dao.domain.Location;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -38,4 +39,25 @@ public class LocationJdbcDao implements RowMapper<Location> {
         String sql = "select id, location, location_no from basis_location";
         return jdbcTemplate.query(sql, this);
     }
+
+    public int updateLocationByPreparedSetter() {
+        Object[] args = {"北京市", "北京市"};
+        PreparedStatementSetter setter = new ArgumentPreparedStatementSetter(args);
+        int result = jdbcTemplate.update("update basis_location set location= ? where location= ?", setter);
+        log.info("updateLocation result={}", result);
+        return result;
+    }
+
+    public int updateLocationByStatementCreator() {
+        PreparedStatementCreator creator = new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                return con.prepareStatement("update basis_location set location='北京市' where location='北京市'");
+            }
+        };
+        int result = jdbcTemplate.update(creator);
+        log.info("updateLocationByStatementCreator update {} record", result);
+        return result;
+    }
+
 }
