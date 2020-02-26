@@ -16,7 +16,7 @@ public interface UserExtMapper {
 
     List<User> selectUser(User user);
 
-    @Select(value = "SELECT host, `user` FROM user")
+    @Select(value = "SELECT host, `user` FROM mysql.user")
     List<User> queryUser(@Param("id") int id, @Param("user") String user);
 
     Cursor<User> selectUserList();

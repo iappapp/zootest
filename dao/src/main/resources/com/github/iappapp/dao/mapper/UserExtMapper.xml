@@ -5,7 +5,7 @@
     <!-- statement -->
 
     <select id="listUser" resultType="com.github.iappapp.dao.domain.User">
-		SELECT host, `user` FROM user
+		SELECT host, `user` FROM mysql.user
 		<where>
             <if test="user != null and user != ''">
                 AND `user` = #{user}
@@ -14,7 +14,7 @@
 	</select>
 
     <select id="selectUser" parameterType="com.github.iappapp.dao.domain.User" resultType="com.github.iappapp.dao.domain.User">
-        SELECT host, `user` FROM user
+        SELECT host, `user` FROM mysql.user
         <where>
             <if test="user != null and user != ''">
                 AND `user` = #{user}
@@ -26,13 +26,13 @@
     </select>
 
     <select id="selectUserList" resultType="com.github.iappapp.dao.domain.User">
-        SELECT host, `user` FROM user
+        SELECT host, `user` FROM mysql.user
     </select>
 
     <select id="selectUserByMap" resultType="map">
-        SELECT host, `user` FROM user
+        SELECT host, `user` FROM mysql.user
     </select>
     <select id="selectMap" resultType="map">
-        SELECT host, `user` FROM user
+        SELECT host, `user` FROM mysql.user
     </select>
 </mapper>
