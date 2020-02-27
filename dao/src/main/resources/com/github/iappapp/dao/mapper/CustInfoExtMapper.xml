@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.iappapp.dao.mapper.CustInfoExtMapper">
+    <!-- namespace 接口全名 -->
+    <!-- statement -->
+
+    <select id="listCustInfo" resultType="com.github.iappapp.dao.domain.CustInfo" parameterType="com.github.iappapp.dao.domain.CustInfo">
+		SELECT id, name, age, id_card_no as idCardNo, sex FROM basis_cust_info
+		<where>
+            <if test="name != null and name != ''">
+                AND `name` = #{name}
+            </if>
+            <if test="idCardNo != null and idCardNo != ''">
+                AND `id_card_no` = #{idCardNo}
+            </if>
+            <if test="id != null and id > 0">
+                AND id = #{id}
+            </if>
+        </where>
+	</select>
+
+    <insert id="insertCustInfo" parameterType="com.github.iappapp.dao.domain.CustInfo">
+        insert into basis_cust_info (id, name, age, id_card_no, sex)
+        value (#{id}, #{name}, #{age}, #{idCardNo}, #{sex})
+    </insert>
+
+</mapper>
