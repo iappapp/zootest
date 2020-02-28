@@ -12,6 +12,6 @@ public class LocationServiceTest extends BaseTest {
 
     @Test
     public void test() {
-        locationService.updateLocation(new Location(null, "北京市", null));
+        locationService.updateLocation(new Location(null, "北京市", null), "北京市+");
     }
 }

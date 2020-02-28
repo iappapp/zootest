@@ -27,9 +27,9 @@ public class LocationController {
 
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     @ResponseBody
-    public String update(Location location) {
+    public String update(Location location, String oldLocation) {
         log.info("update location={}", location);
-        locationService.updateLocation(location);
+        locationService.updateLocation(location, oldLocation);
         return "OK";
     }
 

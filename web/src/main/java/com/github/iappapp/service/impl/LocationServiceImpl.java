@@ -30,8 +30,8 @@ public class LocationServiceImpl implements LocationService {
 
     @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED)
     @Override
-    public int updateLocation(Location location) {
-        int result = locationExtMapper.updateLocation(location, "北京市");
+    public int updateLocation(Location location, String oldLocation) {
+        int result = locationExtMapper.updateLocation(location, oldLocation);
         log.info("updateLocation update {} record", result);
         CustInfo custInfo = new CustInfo();
         custInfo.setAge((short) 23);
@@ -40,7 +40,6 @@ public class LocationServiceImpl implements LocationService {
         custInfo.setSex(false);
         custInfo.setIdCardNo("341221199107296631");
         custInfoService.insertCustInfo(custInfo);
-
         return result;
     }
 }

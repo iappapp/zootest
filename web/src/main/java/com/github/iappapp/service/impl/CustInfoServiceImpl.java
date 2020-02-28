@@ -23,9 +23,10 @@ public class CustInfoServiceImpl implements CustInfoService {
     }
 
     @Override
-    @Transactional(value = "transactionManager", propagation = Propagation.NESTED)
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW)
     public int insertCustInfo(CustInfo custInfo) {
         log.info("insertCustInfo insert custInfo={}", custInfo);
-        return custInfoExtMapper.insertCustInfo(custInfo);
+        int result = custInfoExtMapper.insertCustInfo(custInfo);
+        return result;
     }
 }
