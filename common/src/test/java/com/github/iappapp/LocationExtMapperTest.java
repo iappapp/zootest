@@ -15,9 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class LocationExtMapperTest {
     private static final Logger logger = LoggerFactory.getLogger(LocationExtMapperTest.class);
@@ -115,6 +114,62 @@ public class LocationExtMapperTest {
 
         locationExtMapper.flush();
         logger.info("updateLocation flush finish");
+    }
+
+    @Test
+    public void collectLocationTree() throws Exception {
+        Resource resource = new DefaultResourceLoader().getResource("data_location.json");
+        logger.info("insertLocation json={}", resource.getFilename());
+        logger.info("insertLocation json={}", resource.exists());
+
+        Map<String, String> object = JSONObject.parseObject(resource.getInputStream(), Map.class);
+
+        List<Location> provinceList = Lists.newArrayList();
+        List<Location> cityList = Lists.newArrayList();
+        List<Location> townList = Lists.newArrayList();
+
+        for (Map.Entry<String, String> entry : object.entrySet()) {
+            if (entry.getKey().endsWith("0000")) {
+                provinceList.add(new Location(null, entry.getValue(), entry.getKey()));
+            } else if (entry.getKey().endsWith("00")) {
+                cityList.add(new Location(null, entry.getValue(), entry.getKey()));
+            } else {
+                townList.add(new Location(null, entry.getValue(), entry.getKey()));
+            }
+        }
+
+
+        Collections.sort(provinceList, Comparator.comparing(Location::getLocationNo));
+
+        Collections.sort(cityList, Comparator.comparing(Location::getLocationNo));
+
+        Collections.sort(townList, Comparator.comparing(Location::getLocationNo));
+
+        for (Location location : provinceList) {
+            System.out.println(location.getLocation());
+            List<Location> ofCityList = collectCity(location.getLocationNo(), cityList);
+            for (Location city : ofCityList) {
+                System.out.println("--\t" + city.getLocation());
+                List<Location> ofTownList = collectTown(city.getLocationNo(), townList);
+                for (Location town : ofTownList) {
+                    System.out.println("----\t" + town.getLocation());
+                }
+            }
+        }
+    }
+
+    public List<Location> collectCity(String province, List<Location> locationList) {
+
+        return locationList.stream()
+                .filter(d -> d.getLocationNo().startsWith(province.substring(0, 2)))
+                .collect(Collectors.toList());
+    }
+
+    public List<Location> collectTown(String city, List<Location> locationList) {
+
+        return locationList.stream()
+                .filter(d -> d.getLocationNo().startsWith(city.substring(0, 4)))
+                .collect(Collectors.toList());
     }
 }
 
