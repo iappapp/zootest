@@ -5,6 +5,7 @@ import com.github.iappapp.util.ReflectUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class Book {
+public class Book implements InitializingBean {
     @Export(type = "csv", name = "标题", value = "title")
     private String title;
 
@@ -26,11 +27,11 @@ public class Book {
     private String author;
 
     public void init() {
-
+        System.out.println("book init");
     }
 
     public void destroy() {
-
+        System.out.println("book destroy");
     }
     public static void main(String[] args) throws Exception {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -74,5 +75,9 @@ public class Book {
         System.out.println(book);
     }
 
-
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println(this);
+        System.out.println("afterPropertiesSet bean init finished");
+    }
 }
