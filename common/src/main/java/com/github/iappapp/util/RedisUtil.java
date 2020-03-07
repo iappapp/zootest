@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Map;
+
 @Service
 @Slf4j
 public class RedisUtil {
@@ -14,14 +16,31 @@ public class RedisUtil {
     private JedisPool pool;
 
     public long del(String key) {
-        Jedis jedis = pool.getResource();
-        Long result = jedis.del(key);
+        Jedis jedis = null;
+        Long result = null;
+        try {
+            jedis = pool.getResource();
+            result = jedis.del(key);
+        } catch (Exception ex) {
+
+        } finally {
+            close(jedis);
+        }
         return result;
     }
 
-    public void delete(String ...key) {
-        Jedis jedis = pool.getResource();
-        jedis.del(key);
+    public Long delete(String ...key) {
+        Jedis jedis = null;
+        Long result = null;
+        try {
+            jedis = pool.getResource();
+            result = jedis.del(key);
+        } catch (Exception ex) {
+
+        } finally {
+            close(jedis);
+        }
+        return result;
     }
 
     public String set(String key, Object value) {
@@ -42,8 +61,17 @@ public class RedisUtil {
     }
 
     public String set(String key, String value) {
-        Jedis jedis = pool.getResource();
-        String result = jedis.set(key, value);
+        Jedis jedis = null;
+        String result = null;
+        try {
+            jedis = pool.getResource();
+            result = jedis.set(key, value);
+        } catch (Exception ex) {
+
+        } finally {
+            close(jedis);
+        }
+
         return result;
     }
 
@@ -56,9 +84,7 @@ public class RedisUtil {
         } catch (Exception ex) {
 
         } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
+            close(jedis);
         }
 
         return result;
@@ -76,11 +102,43 @@ public class RedisUtil {
         } catch (Exception ex) {
 
         } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
+            close(jedis);
         }
 
         return false;
+    }
+
+    public Long hset(String key, String field, String value) {
+        Long result = null;
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            result = jedis.hset(key, field, value);
+        } catch (Exception ex) {
+
+        } finally {
+            close(jedis);
+        }
+
+        return result;
+    }
+
+    public String hmset(String key, Map<String, String> keyValueMap) {
+        try (Jedis jedis = pool.getResource()){
+            String result = jedis.hmset(key, keyValueMap);
+            return result;
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    private void close(Jedis jedis) {
+        if (null != jedis) {
+            try {
+                jedis.close();
+            } catch (Exception ex) {
+
+            }
+        }
     }
 }
