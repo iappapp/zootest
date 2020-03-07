@@ -105,6 +105,15 @@ public class RedisUtilTest extends BaseTest {
     }
 
     @Test
+    public void lrange() {
+        List<String> strings = redisUtil.lrange("key_list", 0, 200);
+        String result = redisUtil.lset("key_list", 0, "100");
+        System.out.println(strings);
+        System.out.println(result);
+        System.out.println(redisUtil.lindex("key_list", 0));
+    }
+
+    @Test
     public void configGet() {
         String pattern = "*";
         List<String> result = redisUtil.configGet(pattern);

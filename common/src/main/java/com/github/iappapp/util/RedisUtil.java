@@ -1,6 +1,7 @@
 package com.github.iappapp.util;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -217,6 +218,186 @@ public class RedisUtil {
         } catch (Exception ex) {
         }
         return 0L;
+    }
+
+    public String lpop(String key) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.lpop(key);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public String rpop(String key) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.rpop(key);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public List<String> lrange(String key, long start, long length) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.lrange(key, start, length);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public String ltrim(String key, long start, int end) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.ltrim(key, start, end);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public String lindex(String key, long index) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.lindex(key, index);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public String lset(String key, long index, String value) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.lset(key, index, value);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public Long lrem(String key, long count, String value) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.lrem(key, count, value);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public Long sadd(String key, String ...members) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sadd(key, members);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> smembers(String key) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.smembers(key);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Long srem(String key, String ...members) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.srem(key, members);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public String spop(String key) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.spop(key);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> spop(String key, long count) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.spop(key, count);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Boolean sismember(final String key, final String member) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sismember(key, member);
+        } catch (Exception ex) {
+
+        }
+        return Boolean.FALSE;
+    }
+
+    public Long smove(String srcKey, String dstKey, String member) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.smove(srcKey, dstKey, member);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Long scard(String key) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.scard(key);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> sinter(String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sinter(keys);
+        } catch (Exception ex) {
+
+        }
+        return Sets.newHashSet();
+    }
+
+    public Long sinterstore(String dstKey, String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sinterstore(dstKey, keys);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> sunion(String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sunion(keys);
+        } catch (Exception ex) {
+
+        }
+        return Sets.newHashSet();
+    }
+
+    public Long sunionstore(String dstKey, String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sunionstore(dstKey, keys);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> sdiff(String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sdiff(keys);
+        } catch (Exception ex) {
+        }
+        return Sets.newHashSet();
+    }
+
+    public Long sdiffstore(String dstKey, String ...keys) {
+        try (Jedis jedis = pool.getResource()){
+            return jedis.sdiffstore(dstKey, keys);
+        } catch (Exception ex) {
+        }
+        return null;
     }
 
     public List<String> configGet(String pattern){
