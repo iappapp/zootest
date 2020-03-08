@@ -13,10 +13,9 @@ import static com.github.iappapp.Constant.ZOO_ADDRESS;
 public class ZkClientBase {
 
     public static void main(String[] args) throws Exception {
-        System.out.println(Math.round(-1.5));
         ZkClient zkClient = new ZkClient(new ZkConnection(ZOO_ADDRESS), SESSION_OUT_TIME);
 
-        zkClient.createEphemeral("/temp");
+        zkClient.createEphemeral("/hello");
         zkClient.createPersistent("/zoo/node", true);
 
         zkClient.subscribeDataChanges("/hello", new IZkDataListener() {
@@ -31,12 +30,10 @@ public class ZkClientBase {
 
         System.out.println("now = " + System.currentTimeMillis());
         for (long i = 0; i < 100 * 10; i++) {
+            Thread.sleep(20);
             zkClient.writeData("/hello", String.valueOf(i));
         }
         System.out.println("now spend = " + System.currentTimeMillis());
-
-        Collections collections = null;
-        Collection collection = null;
-
+        zkClient.close();
     }
 }
