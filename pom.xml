@@ -15,6 +15,7 @@
         <module>dao</module>
         <module>jdbc-dao</module>
         <module>leetcode</module>
+        <module>shiro</module>
     </modules>
 
     <dependencies>

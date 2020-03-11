@@ -44,6 +44,11 @@
             <artifactId>jdbc-dao</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.iappapp</groupId>
+            <artifactId>shiro</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

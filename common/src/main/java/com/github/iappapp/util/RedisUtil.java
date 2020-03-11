@@ -70,6 +70,60 @@ public class RedisUtil {
         return result;
     }
 
+    public String get(String key) {
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.get(key);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public byte[] get(byte[] key) {
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.get(key);
+        } catch (Exception ex) {
+
+        }
+        return new byte[0];
+    }
+
+    public Long expire(String key, int timeout) {
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.expire(key, timeout);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Long expire(byte[] key, int timeout) {
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.expire(key, timeout);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<String> keys(String prefix){
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.keys(prefix);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public Set<byte[]> keys(byte[] prefix){
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.keys(prefix);
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
     public String ping() {
         Jedis jedis = null;
         String result = null;
