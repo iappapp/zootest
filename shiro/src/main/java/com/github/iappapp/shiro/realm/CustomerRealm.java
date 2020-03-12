@@ -2,12 +2,15 @@ package com.github.iappapp.shiro.realm;
 
 import com.github.iappapp.dao.domain.CustInfo;
 import com.github.iappapp.shiro.service.LoginService;
+import com.github.iappapp.shiro.service.PermissionService;
+import com.github.iappapp.shiro.service.RoleService;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,10 +19,20 @@ public class CustomerRealm extends AuthorizingRealm {
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        CustInfo custInfo = (CustInfo) principals.getPrimaryPrincipal();
+
+        authorizationInfo.setRoles(roleService.listRoleByUsername(custInfo.getName()));
+        authorizationInfo.setStringPermissions(permissionService.listPermissionByUsername(custInfo.getName()));
+        authorizationInfo.setObjectPermissions(Sets.newHashSet(new WildcardPermission("**")));
+        return authorizationInfo;
     }
 
     @Override
