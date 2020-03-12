@@ -1,7 +1,7 @@
 package com.github.iappapp.shiro.configuration;
 
+import com.github.iappapp.shiro.filter.MeLogOutFilter;
 import com.github.iappapp.shiro.realm.CustomerRealm;
-import com.github.iappapp.util.RedisUtil;
 import com.google.common.collect.Maps;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -12,6 +12,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,6 @@ public class ShiroConfiguration {
     @Autowired
     private JedisPool jedisPool;
 
-    @Autowired
-    private RedisUtil redisUtil;
-
     @Bean(value = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
@@ -52,7 +50,10 @@ public class ShiroConfiguration {
         filter.put("index.jsp", "anon");
         filter.put("/jsp/*.jsp", "anon");
         filter.put("/ftl/*.ftl", "anon");
+        filter.put("/logout", "logout");
+        filter.put("/login", "anon");
         filter.put("/book/*", "authc");
+        filter.put("/location/*", "authc");
         factoryBean.setFilterChainDefinitionMap(filter);
         factoryBean.setSecurityManager(securityManager());
 
@@ -64,6 +65,7 @@ public class ShiroConfiguration {
         SecurityManager securityManager = new DefaultWebSecurityManager();
         ((DefaultSecurityManager) securityManager).setRealm(customerRealm());
         ((DefaultSecurityManager) securityManager).setSessionManager(sessionManager());
+        ((DefaultWebSecurityManager) securityManager).setCacheManager(redisCacheManager());
         return securityManager;
     }
 
@@ -131,5 +133,22 @@ public class ShiroConfiguration {
         redisManager.setJedisPool(jedisPool);
         redisManager.setJedisPoolConfig(poolConfig);
         return redisManager;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager cacheManager = new RedisCacheManager();
+        cacheManager.setRedisManager(redisManager());
+        cacheManager.setPrincipalIdFieldName("name");
+        cacheManager.setKeyPrefix("shiro-cache-");
+        cacheManager.setExpire(3600);
+        return cacheManager;
+    }
+
+    @Bean
+    public MeLogOutFilter meLogOutFilter() {
+        MeLogOutFilter logOutFilter = new MeLogOutFilter();
+        logOutFilter.setCacheManager(redisCacheManager());
+        return logOutFilter;
     }
 }
