@@ -110,7 +110,7 @@ public class RedisUtil {
         try (Jedis jedis = pool.getResource()) {
             return jedis.keys(prefix);
         } catch (Exception ex) {
-
+            log.info("keys={} ex={}", prefix, ex);
         }
         return null;
     }

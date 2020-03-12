@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class RedisUtilTest extends BaseTest {
@@ -126,4 +127,18 @@ public class RedisUtilTest extends BaseTest {
             }
         }
     }
+
+    @Test
+    public void keys() {
+        String pattern = "shiro-session*";
+        Set<String> stringSet = redisUtil.keys(pattern);
+
+        for (String key : stringSet) {
+            System.out.println(redisUtil.get(key));
+            redisUtil.del(key);
+        }
+
+        System.out.println(stringSet);
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.github.iappapp.dao.domain;
 
-public class CustInfo {
+import java.io.Serializable;
+
+public class CustInfo implements Serializable {
     private Long id;
     private String name;
     private Short age;

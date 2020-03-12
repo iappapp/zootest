@@ -1,8 +1,9 @@
 package com.github.iappapp.dao.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     private String host;
     private String user;
 

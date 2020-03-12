@@ -69,7 +69,7 @@ public class ShiroConfiguration {
 
     @Bean
     public CustomerRealm customerRealm() {
-        return new CustomerRealm(hashedCredentialsMatcher());
+        return new CustomerRealm();
     }
 
     @Bean
@@ -98,7 +98,7 @@ public class ShiroConfiguration {
     public RedisSessionDAO redisSessionDao() {
         RedisSessionDAO sessionDao = new RedisSessionDAO();
         sessionDao.setRedisManager(redisManager());
-        sessionDao.setKeyPrefix("shiro-session");
+        sessionDao.setKeyPrefix("shiro-session-");
         sessionDao.setExpire(3600 * 10);
         sessionDao.setSessionIdGenerator(sessionIdGenerator());
         return sessionDao;
