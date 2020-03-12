@@ -1,49 +1,67 @@
 package com.github.iappapp.shiro.configuration;
 
 import com.github.iappapp.shiro.realm.CustomerRealm;
-import com.github.iappapp.shiro.session.RedisSessionDao;
 import com.github.iappapp.util.RedisUtil;
 import com.google.common.collect.Maps;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
-import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
+import java.io.Serializable;
 import java.util.Map;
+import java.util.UUID;
 
 @Configuration
 public class ShiroConfiguration {
     @Value("${loginUrl}")
     private String loginUrl;
+    @Value(value = "${redis.host}")
+    private String host;
+    @Value(value = "${redis.port}")
+    private Integer port;
+    @Value(value = "${redis.password}")
+    private String password;
+
+    @Autowired
+    private JedisPoolConfig poolConfig;
+    @Autowired
+    private JedisPool jedisPool;
 
     @Autowired
     private RedisUtil redisUtil;
 
-    @Bean
+    @Bean(value = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setLoginUrl(loginUrl);
         Map<String, String> filter = Maps.newHashMap();
-        filter.put("/index.html", "anon");
-        filter.put("/*.jsp", "anon");
-        filter.put("/*.ftl", "anon");
-        filter.put("/*", "authc");
+        filter.put("index.jsp", "anon");
+        filter.put("/jsp/*.jsp", "anon");
+        filter.put("/ftl/*.ftl", "anon");
+        filter.put("/book/*", "authc");
         factoryBean.setFilterChainDefinitionMap(filter);
-        factoryBean.setSuccessUrl("/hello.ftl");
-        factoryBean.setUnauthorizedUrl("index.html");
+        factoryBean.setSecurityManager(securityManager());
 
         return factoryBean;
     }
 
     @Bean
     public SecurityManager securityManager() {
-        SecurityManager securityManager = new DefaultSecurityManager();
+        SecurityManager securityManager = new DefaultWebSecurityManager();
         ((DefaultSecurityManager) securityManager).setRealm(customerRealm());
         ((DefaultSecurityManager) securityManager).setSessionManager(sessionManager());
         return securityManager;
@@ -64,18 +82,54 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public SessionManager sessionManager() {
-        SessionManager sessionManager = new DefaultSessionManager();
-        ((DefaultSessionManager) sessionManager).setSessionDAO(redisSessionDao());
-
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDao());
+        sessionManager.setSessionIdCookie(sessionIdCookie());
+        sessionManager.setSessionIdCookieEnabled(true);
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        // 指定session id
+        // 去掉shiro登录时url里的JSESSIONID
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
     @Bean
-    public RedisSessionDao redisSessionDao() {
-        RedisSessionDao sessionDao = new RedisSessionDao();
-        sessionDao.setRedisUtil(redisUtil);
-
+    public RedisSessionDAO redisSessionDao() {
+        RedisSessionDAO sessionDao = new RedisSessionDAO();
+        sessionDao.setRedisManager(redisManager());
+        sessionDao.setKeyPrefix("shiro-session");
+        sessionDao.setExpire(3600 * 10);
+        sessionDao.setSessionIdGenerator(sessionIdGenerator());
         return sessionDao;
+    }
+
+    @Bean
+    public SimpleCookie sessionIdCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie();
+        simpleCookie.setName("shiro.session");
+        return simpleCookie;
+    }
+
+    @Bean
+    public SessionIdGenerator sessionIdGenerator() {
+        SessionIdGenerator sessionIdGenerator = new SessionIdGenerator() {
+            @Override
+            public Serializable generateId(Session session) {
+                return UUID.randomUUID().toString();
+            }
+        };
+        return sessionIdGenerator;
+    }
+
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(host);
+        redisManager.setTimeout(1800);// 配置缓存过期时间 30分钟
+        redisManager.setPassword(password);
+        redisManager.setJedisPool(jedisPool);
+        redisManager.setJedisPoolConfig(poolConfig);
+        return redisManager;
     }
 }

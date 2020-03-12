@@ -149,7 +149,7 @@ public class RedisUtil {
                 return true;
             }
         } catch (Exception ex) {
-
+            log.info("setNx error", ex);
         } finally {
             close(jedis);
         }

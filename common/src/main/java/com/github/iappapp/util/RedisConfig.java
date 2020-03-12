@@ -18,6 +18,9 @@ public class RedisConfig {
     @Value(value = "${redis.port}")
     private Integer port;
 
+    @Value(value = "${redis.password}")
+    private String password;
+
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
         JedisPoolConfig config = new JedisPoolConfig();
@@ -30,6 +33,6 @@ public class RedisConfig {
 
     @Bean
     public JedisPool jedisPool(@Autowired JedisPoolConfig jedisPoolConfig) {
-        return new JedisPool(jedisPoolConfig, host, port);
+        return new JedisPool(jedisPoolConfig, host, port, 2000, password);
     }
 }
