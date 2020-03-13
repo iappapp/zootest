@@ -30,7 +30,7 @@ public class MeLogOutFilter extends LogoutFilter {
 
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-
+        log.info("MeLogOutFilter preHandle start");
         Subject subject = getSubject(request, response);
 
         // Check if POST only logout is enabled
@@ -46,8 +46,11 @@ public class MeLogOutFilter extends LogoutFilter {
         //try/catch added for SHIRO-298:
         try {
             CustInfo custInfo = (CustInfo) subject.getPrincipal();
-            subject.logout();
-            cache.remove(custInfo.getName());
+            log.info("logout custInfo={}", custInfo);
+            if (subject.isAuthenticated()) {
+                subject.logout();
+                cache.remove(custInfo.getName());
+            }
         } catch (SessionException ise) {
             logger.info("Encountered session exception during logout.  This can generally safely be ignored.", ise);
         }

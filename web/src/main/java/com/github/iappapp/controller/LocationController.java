@@ -22,6 +22,7 @@ public class LocationController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public List<Location> selectLocation() {
+        log.info("location list start");
         return locationService.selectLocation();
     }
 

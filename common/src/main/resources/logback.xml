@@ -109,7 +109,7 @@
     </root>
 
     <logger name="org.mybatis" level="debug"/>
-    <logger name="org.springframework" level="ERROR"/>
-    <logger name="org.apache" level="ERROR"/>
-    <logger name="com.datatrees" level="INFO"/>
+    <logger name="org.springframework" level="DEBUG"/>
+    <logger name="org.apache" level="INFO"/>
+    <logger name="com.github.iappapp" level="DEBUG"/>
 </configuration>

@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.servlet.Filter;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
@@ -54,6 +55,9 @@ public class ShiroConfiguration {
         filter.put("/login", "anon");
         filter.put("/book/*", "authc");
         filter.put("/location/*", "authc");
+        Map<String, Filter> filterMap = Maps.newConcurrentMap();
+        filterMap.put("logout", meLogOutFilter());
+        factoryBean.setFilters(filterMap);
         factoryBean.setFilterChainDefinitionMap(filter);
         factoryBean.setSecurityManager(securityManager());
 
@@ -149,6 +153,7 @@ public class ShiroConfiguration {
     public MeLogOutFilter meLogOutFilter() {
         MeLogOutFilter logOutFilter = new MeLogOutFilter();
         logOutFilter.setCacheManager(redisCacheManager());
+        logOutFilter.setEnabled(false);
         return logOutFilter;
     }
 }
