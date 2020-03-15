@@ -132,8 +132,9 @@ public class ShiroConfiguration {
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
-        redisManager.setTimeout(1800);// 配置缓存过期时间 30分钟
-        redisManager.setPassword(password);
+        // 配置缓存过期时间 30分钟
+        redisManager.setTimeout(1800);
+        redisManager.setPassword(password.trim());
         redisManager.setJedisPool(jedisPool);
         redisManager.setJedisPoolConfig(poolConfig);
         return redisManager;

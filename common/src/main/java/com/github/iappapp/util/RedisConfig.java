@@ -33,6 +33,6 @@ public class RedisConfig {
 
     @Bean
     public JedisPool jedisPool(@Autowired JedisPoolConfig jedisPoolConfig) {
-        return new JedisPool(jedisPoolConfig, host, port, 2000, password);
+        return new JedisPool(jedisPoolConfig, host, port, 2000, password.trim());
     }
 }
