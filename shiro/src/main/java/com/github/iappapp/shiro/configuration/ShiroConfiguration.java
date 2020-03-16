@@ -1,5 +1,6 @@
 package com.github.iappapp.shiro.configuration;
 
+import com.github.iappapp.shiro.constant.ShiroConstant;
 import com.github.iappapp.shiro.filter.MeLogOutFilter;
 import com.github.iappapp.shiro.realm.CustomerRealm;
 import com.google.common.collect.Maps;
@@ -104,8 +105,8 @@ public class ShiroConfiguration {
     public RedisSessionDAO redisSessionDao() {
         RedisSessionDAO sessionDao = new RedisSessionDAO();
         sessionDao.setRedisManager(redisManager());
-        sessionDao.setKeyPrefix("shiro-session-");
-        sessionDao.setExpire(3600 * 10);
+        sessionDao.setKeyPrefix(ShiroConstant.SHIRO_SESSION_PREFIX);
+        sessionDao.setExpire(3600 * 1);
         sessionDao.setSessionIdGenerator(sessionIdGenerator());
         return sessionDao;
     }
@@ -113,7 +114,7 @@ public class ShiroConfiguration {
     @Bean
     public SimpleCookie sessionIdCookie() {
         SimpleCookie simpleCookie = new SimpleCookie();
-        simpleCookie.setName("shiro.session");
+        simpleCookie.setName(ShiroConstant.SHIRO_COOKIE_NAME);
         return simpleCookie;
     }
 
@@ -145,7 +146,7 @@ public class ShiroConfiguration {
         RedisCacheManager cacheManager = new RedisCacheManager();
         cacheManager.setRedisManager(redisManager());
         cacheManager.setPrincipalIdFieldName("name");
-        cacheManager.setKeyPrefix("shiro-cache-");
+        cacheManager.setKeyPrefix(ShiroConstant.SHIRO_CACHE_PREFIX);
         cacheManager.setExpire(3600);
         return cacheManager;
     }

@@ -1,6 +1,7 @@
 package com.github.iappapp.util;
 
 import com.github.iappapp.BaseTest;
+import com.github.iappapp.shiro.constant.ShiroConstant;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -130,12 +131,12 @@ public class RedisUtilTest extends BaseTest {
 
     @Test
     public void keys() {
-        String pattern = "shiro-session*";
+        String pattern = ShiroConstant.SHIRO_SESSION_PATTERN;
         Set<String> stringSet = redisUtil.keys(pattern);
 
         for (String key : stringSet) {
             System.out.println(redisUtil.get(key));
-            redisUtil.del(key);
+            // redisUtil.del(key);
         }
 
         System.out.println(stringSet);
