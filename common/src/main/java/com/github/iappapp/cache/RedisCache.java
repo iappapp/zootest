@@ -1,6 +1,8 @@
 package com.github.iappapp.cache;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.cache.Cache;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.concurrent.Callable;
@@ -8,6 +10,7 @@ import java.util.concurrent.Callable;
 public class RedisCache implements Cache {
 
     private RedisTemplate<String, Object> redisTemplate;
+
     private String name;
 
     public RedisTemplate<String, Object> getRedisTemplate() {
@@ -24,7 +27,7 @@ public class RedisCache implements Cache {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -35,12 +38,21 @@ public class RedisCache implements Cache {
 
     @Override
     public ValueWrapper get(Object key) {
-        return null;
+        return new ValueWrapper() {
+            @Override
+            public Object get() {
+                return redisTemplate.getConnectionFactory().getConnection()
+                        .hGet(name.getBytes(), ((String) key).getBytes());
+            }
+        };
     }
 
     @Override
     public <T> T get(Object key, Class<T> type) {
-        return null;
+        byte[] result = redisTemplate.getConnectionFactory().getConnection()
+                .hGet(name.getBytes(), ((String) key).getBytes());
+        String json = new String(result);
+        return JSON.parseObject(json, type);
     }
 
     @Override
@@ -50,21 +62,32 @@ public class RedisCache implements Cache {
 
     @Override
     public void put(Object key, Object value) {
-
+        redisTemplate.getConnectionFactory().getConnection()
+                .hSet(name.getBytes(), ((String) key).getBytes(), JSON.toJSONString(value).getBytes());
     }
 
     @Override
     public ValueWrapper putIfAbsent(Object key, Object value) {
-        return null;
+        RedisConnection redisConnection = redisTemplate.getConnectionFactory().getConnection();
+        boolean exist = redisConnection.hExists(name.getBytes(), ((String) key).getBytes());
+        if (!exist) {
+            redisConnection.hSet(name.getBytes(), ((String) key).getBytes(), JSON.toJSONString(value).getBytes());
+        }
+        return new ValueWrapper() {
+            @Override
+            public Object get() {
+                return redisConnection.hGet(name.getBytes(), ((String) key).getBytes());
+            }
+        };
     }
 
     @Override
     public void evict(Object key) {
-
+        redisTemplate.getConnectionFactory().getConnection().hDel(name.getBytes(), ((String) key).getBytes());
     }
 
     @Override
     public void clear() {
-
+        redisTemplate.getConnectionFactory().getConnection().del(name.getBytes());
     }
 }

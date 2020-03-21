@@ -13,8 +13,8 @@
         <property name="caches">
             <set>
                 <bean class="com.github.iappapp.cache.RedisCache">
-                    <property name="redisTemplate" value="null" />
-                    <property name="name" value="default"/>
+                    <property name="redisTemplate" ref="redisTemplate" />
+                    <property name="name" value="redis-cache-for-annotation-"/>
                 </bean>
 
             </set>
