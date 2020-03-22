@@ -1,12 +1,15 @@
 package com.github.iappapp.cache;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
+import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.concurrent.Callable;
 
+@Slf4j
 public class RedisCache implements Cache {
 
     private RedisTemplate<String, Object> redisTemplate;
@@ -38,11 +41,17 @@ public class RedisCache implements Cache {
 
     @Override
     public ValueWrapper get(Object key) {
+        log.info("get key={}", key);
         return new ValueWrapper() {
             @Override
             public Object get() {
-                return redisTemplate.getConnectionFactory().getConnection()
+                byte[] result =  redisTemplate.getConnectionFactory().getConnection()
                         .hGet(name.getBytes(), ((String) key).getBytes());
+                System.out.println(result);
+                if (null == result) {
+                    throw new RuntimeException("key not exist");
+                }
+                return result != null ? new SimpleValueWrapper(result) : null;
             }
         };
     }
@@ -57,11 +66,13 @@ public class RedisCache implements Cache {
 
     @Override
     public <T> T get(Object key, Callable<T> valueLoader) {
+        log.info("get key={}", key);
         return null;
     }
 
     @Override
     public void put(Object key, Object value) {
+        log.info("put key={} value={}", key, value);
         redisTemplate.getConnectionFactory().getConnection()
                 .hSet(name.getBytes(), ((String) key).getBytes(), JSON.toJSONString(value).getBytes());
     }

@@ -7,7 +7,9 @@ import com.github.iappapp.service.CustInfoService;
 import com.github.iappapp.service.LocationService;
 import com.github.iappapp.util.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +43,13 @@ public class LocationServiceImpl implements LocationService {
         custInfo.setIdCardNo("341221199107296631");
         custInfoService.insertCustInfo(custInfo);
         return result;
+    }
+
+    @Override
+    @Cacheable(key = "#id")
+    public Location location(Long id) {
+        List<Location> locations =  locationExtMapper.selectLocation(new Location(id, null, null));
+        log.info("location locations={}", locations);
+        return CollectionUtils.isEmpty(locations) ? null : locations.get(0);
     }
 }

@@ -22,7 +22,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Cacheable(key = "" + "#word")
+    @Cacheable(value = "redis-cache-for-annotation-", key = "#word")
     public String selectSomething(String word) {
         log.info("selectSomething into method");
         return UUID.randomUUID().toString();

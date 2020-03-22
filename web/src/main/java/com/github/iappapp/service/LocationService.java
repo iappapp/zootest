@@ -8,4 +8,6 @@ public interface LocationService {
     List<Location> selectLocation();
 
     int updateLocation(Location location, String oldLocation);
+
+    Location location(Long id);
 }

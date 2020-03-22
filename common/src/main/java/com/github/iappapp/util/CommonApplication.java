@@ -19,8 +19,8 @@ public class CommonApplication {
         Object object = context.getBean("book");
         BookService bookService = (BookService) context.getBean("bookService");
         bookService.addBook();
-        System.out.println(bookService.selectSomething("hello"));
-        System.out.println(bookService.selectSomething("hello"));
+        System.out.println(bookService.selectSomething("hello and hello"));
+        System.out.println(bookService.selectSomething("hello and hello"));
         CallService callService = context.getBean(CallService.class);
         callService.call();
         LookupPushMsgPool pool = (LookupPushMsgPool) context.getBean(LookupPushMsgPool.class);

@@ -91,5 +91,5 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
+    <import resource="classpath*:redis-cache.xml" />
 </beans>
