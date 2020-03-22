@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -55,21 +53,12 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setDatabase(0);
-        configuration.setHostName(host);
-        configuration.setPassword(password);
-        configuration.setPort(port);
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(configuration);
+        JedisConnectionFactory factory = new JedisConnectionFactory();
+        factory.setDatabase(0);
+        factory.setHostName(host);
+        factory.setPassword(password);
+        factory.setPort(port);
 
-        return jedisConnectionFactory;
+        return factory;
     }
-
-    /*@Bean
-    public RedisCache redisCache() {
-        RedisCache redisCache = new RedisCache();
-        redisCache.setName("redis-cache-for-annotation-");
-        redisCache.setRedisTemplate(redisTemplate());
-        return redisCache;
-    }*/
 }
