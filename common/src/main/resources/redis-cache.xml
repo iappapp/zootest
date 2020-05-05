@@ -7,18 +7,15 @@
          http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 
-    <cache:annotation-driven cache-manager="redisCacheManager" />
+    <cache:annotation-driven cache-manager="simpleRedisCacheManager" />
 
-    <bean id="redisCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-        <property name="caches">
+    <bean id="simpleRedisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+        <constructor-arg name="cacheNames">
             <set>
-                <bean class="com.github.iappapp.cache.RedisCache">
-                    <property name="redisTemplate" ref="redisTemplate" />
-                    <property name="name" value="redis-cache-for-annotation-"/>
-                </bean>
-
+                <value>redis-cache</value>
             </set>
-        </property>
+        </constructor-arg>
+        <constructor-arg name="cacheNullValues" value="true" />
+        <constructor-arg name="redisOperations" ref="redisTemplate" />
     </bean>
-
 </beans>

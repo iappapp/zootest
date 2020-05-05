@@ -48,9 +48,6 @@ public class RedisCache implements Cache {
                 byte[] result =  redisTemplate.getConnectionFactory().getConnection()
                         .hGet(name.getBytes(), ((String) key).getBytes());
                 System.out.println(result);
-                if (null == result) {
-                    throw new RuntimeException("key not exist");
-                }
                 return result != null ? new SimpleValueWrapper(result) : null;
             }
         };
