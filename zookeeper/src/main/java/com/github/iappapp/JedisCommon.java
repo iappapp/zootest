@@ -10,7 +10,7 @@ public class JedisCommon {
 
     public static void main(String[] args) throws Exception {
         String fileName = "KeyTest.lua";
-        String path = "G:\\zoo-test\\zootest\\src\\main\\resources\\" + fileName;
+        String path = "G:\\zootest\\zookeeper\\src\\main\\resources\\" + fileName;
         System.out.println(fileName);
         Jedis jedis = new Jedis(Constant.REDIS_HOST, Constant.REDIS_PORT);
         Date start = new Date();

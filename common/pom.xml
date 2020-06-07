@@ -13,7 +13,7 @@
     <artifactId>common</artifactId>
 
     <properties>
-        <spring.framework.version>4.3.18.RELEASE</spring.framework.version>
+        <spring.framework.version>5.0.3.RELEASE</spring.framework.version>
         <jackson.databind.version>2.10.3</jackson.databind.version>
         <spring.data.redis.version>1.8.4.RELEASE</spring.data.redis.version>
     </properties>
@@ -75,6 +75,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-instrument</artifactId>
             <version>${spring.framework.version}</version>
         </dependency>
         <dependency>
@@ -228,6 +233,16 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.5.2</version>
         </dependency>
     </dependencies>
     <build>

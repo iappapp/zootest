@@ -1,5 +1,6 @@
 package com.github.iappapp.util;
 
+import com.github.iappapp.modal.Account;
 import com.github.iappapp.service.BookService;
 import com.github.iappapp.service.CallService;
 import com.github.iappapp.service.LookupPushMsgPool;
@@ -28,6 +29,8 @@ public class CommonApplication {
 
         ServiceB serviceB = context.getBean(ServiceB.class);
         serviceB.pushSomething();
+        Account account = new Account();
+        account.doSomething();
         context.close();
         System.out.println(object);
     }
