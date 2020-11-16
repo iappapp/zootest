@@ -13,7 +13,7 @@
     <artifactId>common</artifactId>
 
     <properties>
-        <spring.framework.version>5.0.3.RELEASE</spring.framework.version>
+        <spring.framework.version>5.0.16.RELEASE</spring.framework.version>
         <jackson.databind.version>2.10.3</jackson.databind.version>
         <spring.data.redis.version>1.8.4.RELEASE</spring.data.redis.version>
     </properties>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.16</version>
+            <version>1.18.16</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.42</version>
+            <version>8.0.16</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -235,14 +235,14 @@
             <version>2.9.0</version>
         </dependency>
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.5.4</version>
         </dependency>
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.4</version>
         </dependency>
     </dependencies>
     <build>
