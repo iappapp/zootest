@@ -16,6 +16,7 @@
         <module>jdbc-dao</module>
         <module>leetcode</module>
         <module>shiro</module>
+        <module>rabbitmq</module>
     </modules>
 
     <properties>
